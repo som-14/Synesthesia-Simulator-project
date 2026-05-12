@@ -14,28 +14,6 @@ A Flask web application that converts sensory inputs (text, audio, numbers) into
 | **Matplotlib** | Color-field paintings, 3D spatial maps, audio spectrums, consistency gauge charts |
 | **Flask** | Complete web application with routing, templates, form handling |
 
-## 🚀 Quick Start
-
-📁 Project Structure
-synesthesia-simulator/
-├── app.py                 # Flask routes & web interface
-├── engine.py              # Core logic (4 classes)
-├── visualizer.py          # Matplotlib charts (1 class)
-├── data_manager.py        # File handling & sessions (2 classes)
-├── requirements.txt       # Dependencies
-├── README.md             # This file
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   └── generated/        # Auto-created for images
-└── templates/
-    ├── base.html
-    ├── index.html
-    ├── text.html
-    ├── audio.html
-    ├── spatial.html
-    ├── profile.html
-    └── results.html
 
 👥 Team Division
 | Person       | File                 | Classes                                                                | Technologies                      |
