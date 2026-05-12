@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Text Visualization - Synesthesia Simulator{% endblock %}
+
+{% block content %}
+<h2>📝 Text to Color Visualization</h2>
+
+<p style="margin: 15px 0; line-height: 1.6;">
+    Enter any text and see how synesthetes perceive it as colors. 
+    Each letter is mapped to a specific color based on the selected profile.
+</p>
+
+<form method="POST" action="{{ url_for('text_visualizer') }}">
+    <div class="form-group">
+        <label for="text">Enter Your Text:</label>
+        <textarea name="text" id="text" rows="4" placeholder="Type something... e.g., HELLO WORLD or your name" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="profile">Choose Synesthetic Profile:</label>
+        <select name="profile" id="profile">
+            {% for profile in profiles %}
+            <option value="{{ profile }}">{{ profile.capitalize() }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="user_id">Your Name/User ID (optional):</label>
+        <input type="text" name="user_id" id="user_id" placeholder="anonymous" value="anonymous">
+    </div>
+
+    <button type="submit" class="btn">Generate Visualization</button>
+</form>
+
+<div style="margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+    <h4 style="color: #667eea;">Available Profiles:</h4>
+    <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+        <li><strong>Standard</strong> - Mathematically generated color wheel</li>
+        <li><strong>Nabokov</strong> - Famous author Vladimir Nabokov's actual letter colors</li>
+        <li><strong>Messiaen</strong> - Composer Olivier Messiaen's musical note colors</li>
+        <li><strong>Warm</strong> - Warm color palette (reds, oranges, yellows)</li>
+        <li><strong>Cool</strong> - Cool color palette (blues, greens, purples)</li>
+    </ul>
+</div>
+{% endblock %}
