@@ -3,173 +3,182 @@
 {% block title %}Results - Synesthesia Simulator{% endblock %}
 
 {% block content %}
-<h2>📊 Visualization Results</h2>
+<div class="results-page">
+    <h2>📊 Visualization Results</h2>
 
-{% if result_type == 'text' %}
-    <h3>Text Analysis: "{{ text }}"</h3>
-    <p><strong>Profile:</strong> {{ profile.capitalize() }}</p>
-
-    {% if analysis %}
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>{{ analysis.total_chars }}</h3>
-            <p>Total Characters</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ analysis.unique_colors }}</h3>
-            <p>Unique Colors</p>
-        </div>
-    </div>
-
-    {% if analysis.dominant_colors %}
-    <h4 style="margin-top: 20px;">Dominant Colors:</h4>
-    <div class="color-grid">
-        {% for dc in analysis.dominant_colors %}
-        <div class="color-box" style="background-color: {{ dc.color }}; color: {% if dc.color in ['#000000', '#2C3E50', '#34495E'] %}white{% else %}black{% endif %};">
-            {{ dc.percentage|round(1) }}%
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endif %}
-
-{% elif result_type == 'audio' %}
-    <h3>Audio Spectrum Analysis</h3>
-    {% if analysis %}
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>{{ "%.1f"|format(analysis.peak_frequency) }} Hz</h3>
-            <p>Peak Frequency</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ "%.2e"|format(analysis.total_energy) }}</h3>
-            <p>Total Energy</p>
-        </div>
-    </div>
-
-    {% if analysis.dominant_colors %}
-    <h4 style="margin-top: 20px;">Dominant Color Regions:</h4>
-    <div class="color-grid">
-        {% for dc in analysis.dominant_colors %}
-        <div class="color-box" style="background-color: {{ dc.color }};"></div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endif %}
-
-{% elif result_type == 'spatial' %}
-    <h3>Spatial Map: {{ sequence|join(', ') }}</h3>
-    {% if analysis and analysis.positions %}
-    <div style="margin: 20px 0;">
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="background: #667eea; color: white;">
-                    <th style="padding: 10px; border: 1px solid #ddd;">Item</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">X</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Y</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Z</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for pos in analysis.positions %}
-                <tr style="background: {% if loop.index is divisibleby 2 %}#f9f9f9{% else %}white{% endif %};">
-                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">{{ pos.item }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ "%.2f"|format(pos.x) }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ "%.2f"|format(pos.y) }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ "%.2f"|format(pos.z) }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endif %}
-
-{% elif result_type == 'consistency' %}
-    <h3>🧪 Consistency Test Results</h3>
-    {% if analysis %}
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>{{ "%.1f"|format(analysis.consistency_score) }}%</h3>
-            <p>Consistency Score</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ analysis.tests_count }}</h3>
-            <p>Tests Taken</p>
-        </div>
-    </div>
-
-    <div style="margin: 20px 0; padding: 20px; border-radius: 10px; 
-                background: {% if analysis.is_synesthete %}#d4edda{% else %}#f8d7da{% endif %};
-                border: 2px solid {% if analysis.is_synesthete %}#28a745{% else %}#dc3545{% endif %};">
-        <h4 style="color: {% if analysis.is_synesthete %}#155724{% else %}#721c24{% endif %};">
-            {% if analysis.is_synesthete %}
-                ✅ {{ analysis.message }}
-            {% else %}
-                ❌ {{ analysis.message }}
+    {% if result_type == 'text' %}
+        <div class="result-section">
+            <h3>📝 Text Analysis: "{{ text }}"</h3>
+            <p><strong>Profile:</strong> {{ profile.capitalize() }}</p>
+            
+            {% if analysis %}
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-value">{{ analysis.total_chars }}</span>
+                        <span class="stat-label">Total Characters</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">{{ analysis.unique_colors }}</span>
+                        <span class="stat-label">Unique Colors</span>
+                    </div>
+                </div>
+                
+                {% if analysis.dominant_colors %}
+                    <h4>Dominant Colors:</h4>
+                    <div class="dominant-colors">
+                        {% for dc in analysis.dominant_colors %}
+                            <div class="color-block" style="background: {{ dc.color }};">
+                                <span class="color-hex">{{ dc.color }}</span>
+                                <span class="color-pct">{{ dc.percentage|round(1) }}%</span>
+                                <span class="color-count">({{ dc.count }} chars)</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             {% endif %}
-        </h4>
-        <p style="margin-top: 10px;">
-            {% if analysis.is_synesthete %}
-                Your color associations are highly consistent (>{{ 80 }}%), which is a strong indicator of genuine synesthesia.
-            {% else %}
-                Your associations vary across tests. Try testing again in a few days without looking at your previous answers.
-            {% endif %}
-        </p>
-    </div>
-
-    {% if analysis.character_scores %}
-    <h4 style="margin-top: 20px;">Per-Character Consistency:</h4>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">
-        {% for char, score in analysis.character_scores.items() %}
-        <div style="text-align: center; padding: 10px; border-radius: 8px;
-                    background: {% if score > 80 %}#d4edda{% elif score > 50 %}#fff3cd{% else %}#f8d7da{% endif %};">
-            <div style="font-size: 1.5em; font-weight: bold;">{{ char }}</div>
-            <div style="font-size: 0.9em;">{{ "%.0f"|format(score) }}%</div>
         </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+
+    {% elif result_type == 'audio' %}
+        <div class="result-section">
+            <h3>🎵 Audio Spectrum Analysis</h3>
+            
+            {% if analysis %}
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-value">{{ "%.1f"|format(analysis.peak_frequency) }} Hz</span>
+                        <span class="stat-label">Peak Frequency</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">{{ "%.2e"|format(analysis.total_energy) }}</span>
+                        <span class="stat-label">Total Energy</span>
+                    </div>
+                </div>
+                
+                {% if analysis.dominant_colors %}
+                    <h4>Dominant Color Regions:</h4>
+                    <div class="dominant-colors">
+                        {% for dc in analysis.dominant_colors %}
+                            <div class="color-block" style="background: {{ dc.color }};">
+                                <span class="color-hex">{{ dc.color }}</span>
+                                <span class="color-energy">{{ "%.3f"|format(dc.energy) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+    {% elif result_type == 'spatial' %}
+        <div class="result-section">
+            <h3>📍 Spatial Map: {{ sequence|join(', ') }}</h3>
+            
+            {% if analysis and analysis.positions %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>X</th>
+                            <th>Y</th>
+                            <th>Z</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pos in analysis.positions %}
+                            <tr>
+                                <td><strong>{{ pos.item }}</strong></td>
+                                <td>{{ "%.2f"|format(pos.x) }}</td>
+                                <td>{{ "%.2f"|format(pos.y) }}</td>
+                                <td>{{ "%.2f"|format(pos.z) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+
+    {% elif result_type == 'consistency' %}
+        <div class="result-section">
+            <h3>🧪 Consistency Test Results</h3>
+            
+            {% if analysis %}
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-value">{{ "%.1f"|format(analysis.consistency_score) }}%</span>
+                        <span class="stat-label">Consistency Score</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">{{ analysis.tests_count }}</span>
+                        <span class="stat-label">Tests Taken</span>
+                    </div>
+                </div>
+
+                <div class="synesthete-status {% if analysis.is_synesthete %}synesthete-yes{% else %}synesthete-no{% endif %}">
+                    {% if analysis.is_synesthete %}
+                        <h4>✅ {{ analysis.message }}</h4>
+                        <p>Your color associations are highly consistent (>80%), which is a strong indicator of genuine synesthesia.</p>
+                    {% else %}
+                        <h4>❌ {{ analysis.message }}</h4>
+                        <p>Your associations vary across tests. Try testing again in a few days without looking at your previous answers.</p>
+                    {% endif %}
+                </div>
+
+                {% if analysis.character_scores %}
+                    <h4>Per-Character Consistency:</h4>
+                    <div class="character-scores">
+                        {% for char, score in analysis.character_scores.items() %}
+                            <div class="char-score 
+                                {% if score > 80 %}score-high
+                                {% elif score > 50 %}score-medium
+                                {% else %}score-low{% endif %}">
+                                <span class="char-letter">{{ char }}</span>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: {{ score }}%;"></div>
+                                </div>
+                                <span class="score-pct">{{ "%.0f"|format(score) }}%</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+    {% elif result_type == 'sessions' %}
+        <div class="result-section">
+            <h3>📁 Session History for {{ user_id }}</h3>
+            
+            {% if sessions %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session in sessions %}
+                            <tr>
+                                <td>{{ session.session_type }}</td>
+                                <td>{{ session.datetime[:10] if session.datetime else 'N/A' }}</td>
+                                <td>{{ session.datetime[11:16] if session.datetime else 'N/A' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="no-data">No sessions found for this user.</p>
+            {% endif %}
+        </div>
     {% endif %}
 
-{% elif result_type == 'sessions' %}
-    <h3>📁 Session History for {{ user_id }}</h3>
-    {% if sessions %}
-    <div style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="background: #667eea; color: white;">
-                    <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Date</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for session in sessions %}
-                <tr style="background: {% if loop.index is divisibleby 2 %}#f9f9f9{% else %}white{% endif %};">
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ session.session_type }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ session.datetime[:10] if session.datetime else 'N/A' }}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">{{ session.datetime[11:16] if session.datetime else 'N/A' }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <p>No sessions found for this user.</p>
+    {% if image_path %}
+        <div class="visualization">
+            <h4>Generated Visualization:</h4>
+            <img src="{{ image_path }}" alt="Synesthesia Visualization" class="result-image">
+            {% if filename %}
+                <p class="filename">File: {{ filename }}</p>
+            {% endif %}
+        </div>
     {% endif %}
-{% endif %}
-
-{% if image_path %}
-<div style="margin: 30px 0; text-align: center;">
-    <img src="{{ image_path }}" alt="Visualization" class="result-image">
 </div>
-{% endif %}
-
-<div style="margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-    <a href="{{ url_for('text_visualizer') }}" class="btn">Try Another Text</a>
-    <a href="{{ url_for('audio_visualizer') }}" class="btn">Try Audio</a>
-    <a href="{{ url_for('spatial_visualizer') }}" class="btn">Try Spatial</a>
-    <a href="{{ url_for('profile_builder') }}" class="btn">Build Profile</a>
-</div>
-
 {% endblock %}
