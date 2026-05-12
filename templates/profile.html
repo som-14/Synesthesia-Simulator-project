@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Profile Builder - Synesthesia Simulator{% endblock %}
+
+{% block content %}
+<h2>👤 Synesthetic Profile Builder</h2>
+
+<p style="margin: 15px 0; line-height: 1.6;">
+    Create your own color-to-letter mappings. Save your profile and test your consistency over time.
+    <strong>Real synesthetes have 90%+ consistency</strong> — their associations don't change!
+</p>
+
+<form method="POST" action="{{ url_for('profile_builder') }}">
+    <input type="hidden" name="user_id" value="{{ user_id }}">
+
+    <div class="form-group">
+        <label>Your User ID: <strong>{{ user_id }}</strong></label>
+        <p style="font-size: 0.9em; color: #666;">
+            Use the same ID each time to track consistency. Default is "anonymous".
+        </p>
+    </div>
+
+    <h3 style="margin: 20px 0 15px;">Assign Colors to Characters:</h3>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin: 20px 0;">
+        {% for char in characters %}
+        <div style="text-align: center;">
+            <label style="font-size: 1.2em; font-weight: bold;">{{ char }}</label>
+            <input type="color" name="color_{{ char }}" 
+                   value="{{ mappings.get(char, '#667eea') }}"
+                   style="width: 60px; height: 40px; border: none; cursor: pointer;">
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
+        <button type="submit" name="action" value="save" class="btn">💾 Save Profile</button>
+        <button type="submit" name="action" value="test" class="btn" style="background: #27ae60;">🧪 Test Consistency</button>
+    </div>
+</form>
+
+<div style="margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+    <h4 style="color: #667eea;">About Consistency Testing:</h4>
+    <p style="line-height: 1.6;">
+        Synesthesia is characterized by <strong>consistent, involuntary associations</strong>.
+        If you truly have synesthesia, your color for "A" will always be the same color,
+        even if tested weeks apart.
+    </p>
+    <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+        <li>Save your profile today</li>
+        <li>Come back in a few days</li>
+        <li>Assign colors again without looking at your old choices</li>
+        <li>The system compares and calculates your consistency score</li>
+    </ul>
+</div>
+{% endblock %}
