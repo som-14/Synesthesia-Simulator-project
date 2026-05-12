@@ -16,11 +16,6 @@ A Flask web application that converts sensory inputs (text, audio, numbers) into
 
 ## 🚀 Quick Start
 
-### Installation
-```bash
-pip install -r requirements.txt
-
-
 📁 Project Structure
 synesthesia-simulator/
 ├── app.py                 # Flask routes & web interface
