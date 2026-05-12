@@ -3,57 +3,58 @@
 {% block title %}Audio Visualization - Synesthesia Simulator{% endblock %}
 
 {% block content %}
-<h2>🎵 Audio to Color Visualization</h2>
+<div class="page-header">
+    <h2>🎵 Audio to Color Visualization</h2>
+    <p>Generate a sample audio signal and see how synesthetes "see" music as colors. 
+    The system creates a C-major chord and visualizes its frequency spectrum.</p>
+</div>
 
-<p style="margin: 15px 0; line-height: 1.6;">
-    Generate a sample audio signal and see how synesthetes "see" music as colors.
-    The system creates a C-major chord and visualizes its frequency spectrum.
-</p>
+<div class="audio-form">
+    <form method="POST" action="{{ url_for('audio_visualizer') }}">
+        <div class="form-group">
+            <label for="user_id">Your Name / User ID (optional):</label>
+            <input type="text" id="user_id" name="user_id" placeholder="anonymous" 
+                   value="{{ request.form.get('user_id', '') }}">
+        </div>
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-large">
+                🎶 Generate Audio Visualization
+            </button>
+        </div>
+    </form>
+</div>
 
-<form method="POST" action="{{ url_for('audio_visualizer') }}">
-    <div class="form-group">
-        <label for="user_id">Your Name/User ID (optional):</label>
-        <input type="text" name="user_id" id="user_id" placeholder="anonymous" value="anonymous">
-    </div>
-
-    <p style="margin: 15px 0; color: #666;">
-        <em>This will generate a 2-second C-major chord (261.63 Hz, 329.63 Hz, 392.00 Hz) 
-        with harmonics and visualize its frequency spectrum.</em>
-    </p>
-
-    <button type="submit" class="btn">Generate Audio Visualization</button>
-</form>
-
-<div style="margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
-    <h4 style="color: #667eea;">Frequency to Color Mapping:</h4>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 30px; height: 30px; background: #2C3E50; border-radius: 5px;"></div>
-            <span>Sub-bass (20-60 Hz)</span>
+<div class="freq-mapping">
+    <h3>Frequency to Color Mapping:</h3>
+    <div class="freq-grid">
+        <div class="freq-item" style="border-left-color: #2C3E50;">
+            <span class="freq-color" style="background: #2C3E50;"></span>
+            <span class="freq-label">Sub-bass (20-60 Hz)</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 30px; height: 30px; background: #8E44AD; border-radius: 5px;"></div>
-            <span>Bass (60-250 Hz)</span>
+        <div class="freq-item" style="border-left-color: #8E44AD;">
+            <span class="freq-color" style="background: #8E44AD;"></span>
+            <span class="freq-label">Bass (60-250 Hz)</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 30px; height: 30px; background: #3498DB; border-radius: 5px;"></div>
-            <span>Low Mids (250-500 Hz)</span>
+        <div class="freq-item" style="border-left-color: #3498DB;">
+            <span class="freq-color" style="background: #3498DB;"></span>
+            <span class="freq-label">Low Mids (250-500 Hz)</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 30px; height: 30px; background: #2ECC71; border-radius: 5px;"></div>
-            <span>Mids (500-2000 Hz)</span>
+        <div class="freq-item" style="border-left-color: #2ECC71;">
+            <span class="freq-color" style="background: #2ECC71;"></span>
+            <span class="freq-label">Mids (500-2000 Hz)</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 30px; height: 30px; background: #F1C40F; border-radius: 5px;"></div>
-            <span>High Mids (2000-4000 Hz)</span>
+        <div class="freq-item" style="border-left-color: #F1C40F;">
+            <span class="freq-color" style="background: #F1C40F;"></span>
+            <span class="freq-label">High Mids (2000-4000 Hz)</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 30px; height: 30px; background: #E67E22; border-radius: 5px;"></div>
-            <span>Presence (4000-6000 Hz)</span>
+        <div class="freq-item" style="border-left-color: #E67E22;">
+            <span class="freq-color" style="background: #E67E22;"></span>
+            <span class="freq-label">Presence (4000-6000 Hz)</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 30px; height: 30px; background: #E74C3C; border-radius: 5px;"></div>
-            <span>Brilliance (6000-20000 Hz)</span>
+        <div class="freq-item" style="border-left-color: #E74C3C;">
+            <span class="freq-color" style="background: #E74C3C;"></span>
+            <span class="freq-label">Brilliance (6000-20000 Hz)</span>
         </div>
     </div>
 </div>
