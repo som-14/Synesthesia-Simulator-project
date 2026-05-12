@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Spatial Visualization - Synesthesia Simulator{% endblock %}
+
+{% block content %}
+<h2>📍 Spatial Sequence Visualization</h2>
+
+<p style="margin: 15px 0; line-height: 1.6;">
+    Some synesthetes see numbers and months in specific spatial locations.
+    Enter a sequence and see how they might be arranged in 3D space.
+</p>
+
+<form method="POST" action="{{ url_for('spatial_visualizer') }}">
+    <div class="form-group">
+        <label for="sequence_type">Sequence Type:</label>
+        <select name="sequence_type" id="sequence_type">
+            <option value="numbers">Numbers (0-9)</option>
+            <option value="months">Months (Jan-Dec)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="sequence">Enter Sequence:</label>
+        <input type="text" name="sequence" id="sequence" 
+               placeholder="For numbers: 1 3 5 7 9 | For months: Jan Mar Jun Sep" required>
+    </div>
+
+    <div class="form-group">
+        <label for="user_id">Your Name/User ID (optional):</label>
+        <input type="text" name="user_id" id="user_id" placeholder="anonymous" value="anonymous">
+    </div>
+
+    <button type="submit" class="btn">Generate Spatial Map</button>
+</form>
+
+<div style="margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+    <h4 style="color: #667eea;">Examples:</h4>
+    <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+        <li><strong>Numbers:</strong> 1 2 3 4 5 or 9 7 5 3 1</li>
+        <li><strong>Months:</strong> Jan Feb Mar Apr May</li>
+        <li><strong>Random:</strong> 3 1 4 1 5 9 (pi digits)</li>
+    </ul>
+</div>
+{% endblock %}
